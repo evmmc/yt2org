@@ -1,0 +1,10 @@
+#+title: yt2org
+
+Get a summary of a YT video. Stores the original transcript as well.
+
+*Usage:*
+
+#+begin_src text
+❯ ./yt2org.py https://www.youtube.com/watch\?v\=EW4ytINstvc
+#+end_src
+
