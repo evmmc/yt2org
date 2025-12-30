@@ -33,7 +33,7 @@ def extract_live_video_id(url):
     """
     Extracts the YouTube video ID from a /live/ URL using a regular expression.
     """
-    pattern = r'(?:https?://)?(?:www\.)?(?:youtube\.com/(?:[^/\n\s]+/\[^/]+\/|(?:v|e(?:mbed)?|live)\/|\S*?[?&]v=)|youtu\.be/)([a-zA-Z0-9_-]{11})'
+    pattern = r'(?:https?://)?(?:www\.)?(?:youtube\.com/(?:[^/\n\s]+/[^/]+/|(?:v|e(?:mbed)?|live)/|\S*?[?&]v=)|youtu\.be/)([a-zA-Z0-9_-]{11})'
     match = re.search(pattern, url)
     return match.group(1) if match else None
 
@@ -42,7 +42,7 @@ def extract_standard_video_id(url):
     """
     Extracts the YouTube video ID from a standard URL using a regular expression.
     """
-    pattern = r'(?:https?://)?(?:www eitet)?(?:youtube\.com/(?:[^/\n\s]+/\[^/]+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be/)([a-zA-Z0-9_-]{11})'
+    pattern = r'(?:https?://)?(?:www\.)?(?:youtube\.com/(?:[^/\n\s]+/[^/]+/|(?:v|e(?:mbed)?)/|\S*?[?&]v=|)|youtu\.be/)([a-zA-Z0-9_-]{11})'
     match = re.search(pattern, url)
     return match.group(1) if match else None
 
