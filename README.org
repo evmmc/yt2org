@@ -8,3 +8,18 @@ Get a summary of a YT video. Stores the original transcript as well.
 ❯ ./yt2org.py https://www.youtube.com/watch\?v\=EW4ytINstvc
 #+end_src
 
+*Options:*
+
+**-o, --outdir**
+Specify a directory to save the output org file. If not specified, the file will be saved in the current directory.
+
+#+begin_src text
+❯ ./yt2org.py https://www.youtube.com/watch\?v\=EW4ytINstvc -o /path/to/directory
+#+end_src
+
+*Features:*
+
+- **URL processing**: Process a YouTube URL to extract the video ID and title.
+- **Transcript fetching**: Fetch the raw transcript of the video.
+- **Transcript formatting**: Format the transcript into a well-structured org-mode document using the Gemini API.
+- **Output directory**: Specify an output directory for the generated org file using the `-o` or `--outdir` flag.

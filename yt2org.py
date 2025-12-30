@@ -29,12 +29,20 @@ def get_video_title(url):
         sys.exit(1)
 
 
-def extract_video_id(url):
+def extract_live_video_id(url):
     """
-    Extracts the YouTube video ID from a URL using a regular expression.
+    Extracts the YouTube video ID from a /live/ URL using a regular expression.
     """
-    # This regex pattern covers standard, shortened, and embed URLs
-    pattern = r'(?:https?://)?(?:wwweitet)?(?:youtube\.com/(?:[^/\n\s]+/\S+/|(?:v|e(?:mbed)?)/|\S*?[?&]v=)|youtu\.be/)([a-zA-Z0-9_-]{11})'
+    pattern = r'(?:https?://)?(?:www\.)?(?:youtube\.com/(?:[^/\n\s]+/\[^/]+\/|(?:v|e(?:mbed)?|live)\/|\S*?[?&]v=)|youtu\.be/)([a-zA-Z0-9_-]{11})'
+    match = re.search(pattern, url)
+    return match.group(1) if match else None
+
+
+def extract_standard_video_id(url):
+    """
+    Extracts the YouTube video ID from a standard URL using a regular expression.
+    """
+    pattern = r'(?:https?://)?(?:www eitet)?(?:youtube\.com/(?:[^/\n\s]+/\[^/]+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be/)([a-zA-Z0-9_-]{11})'
     match = re.search(pattern, url)
     return match.group(1) if match else None
 
@@ -89,9 +97,14 @@ def main():
     """
     parser = argparse.ArgumentParser(description="Fetch, format, and save a YouTube video transcript as an org-mode document.")
     parser.add_argument("url", type=str, help="The YouTube video URL.")
+    parser.add_argument("-o", "--outdir", type=str, help="The output directory for the org file.", default=".")
     args = parser.parse_args()
 
-    video_id = extract_video_id(args.url)
+    if "/live/" in args.url:
+        video_id = extract_live_video_id(args.url)
+    else:
+        video_id = extract_standard_video_id(args.url)
+
     if not video_id:
         print("Error: Could not extract video ID from URL.", file=sys.stderr)
         sys.exit(1)
@@ -111,12 +124,15 @@ def main():
     formatted_document += "\n\n* transcript\n" + raw_transcript
 
     output_filename = f"{video_title}-{video_id}.org"
+    output_path = os.path.join(args.outdir, output_filename)
+
     try:
-        with open(output_filename, "w") as f:
+        os.makedirs(args.outdir, exist_ok=True)
+        with open(output_path, "w") as f:
             f.write(formatted_document)
-        print(f"Done. Formatted transcript saved to {output_filename}")
+        print(f"Done. Formatted transcript saved to {output_path}")
     except IOError as e:
-        print(f"Error writing to file {output_filename}: {e}", file=sys.stderr)
+        print(f"Error writing to file {output_path}: {e}", file=sys.stderr)
         sys.exit(1)
 
 
