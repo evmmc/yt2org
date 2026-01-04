@@ -6,7 +6,7 @@ import re
 import sys
 import time
 
-import google.generativeai as genai
+from google import genai
 from youtube_transcript_api import YouTubeTranscriptApi
 from yt_dlp import YoutubeDL
 
@@ -82,7 +82,7 @@ def chunk_text(text, chunk_size=20000):
     return chunks
 
 
-def generate_summary(model, transcript):
+def generate_summary(client, model_id, transcript):
     """
     Generates a comprehensive summary of the transcript.
     """
@@ -108,14 +108,14 @@ Please provide a highly detailed and comprehensive summary of the following vide
 {transcript}
 """
     try:
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(model=model_id, contents=prompt)
         return response.text
     except Exception as e:
         print(f"Error generating summary: {e}", file=sys.stderr)
         return "Error generating summary."
 
 
-def generate_formatted_transcript(model, transcript):
+def generate_formatted_transcript(client, model_id, transcript):
     """
     Formats the raw transcript into readable text, chunk by chunk.
     """
@@ -146,7 +146,7 @@ Please format the following raw transcript segment into highly readable prose.
         try:
             # Add a small delay to avoid rate limits if necessary, though Gemini usually handles bursts well.
             # time.sleep(1)
-            response = model.generate_content(prompt)
+            response = client.models.generate_content(model=model_id, contents=prompt)
             formatted_parts.append(response.text)
         except Exception as e:
             print(f"Error formatting chunk {i + 1}: {e}", file=sys.stderr)
@@ -167,12 +167,11 @@ def format_transcript_with_gemini(transcript):
         )
         sys.exit(1)
 
-    genai.configure(api_key=api_key)
-    # Using gemini-1.5-pro for large context window and better reasoning
-    model = genai.GenerativeModel("gemini-3.0-pro")
+    client = genai.Client(api_key=api_key, vertexai=False)
+    model_id = "gemini-2.5-pro"
 
-    summary = generate_summary(model, transcript)
-    formatted_transcript = generate_formatted_transcript(model, transcript)
+    summary = generate_summary(client, model_id, transcript)
+    formatted_transcript = generate_formatted_transcript(client, model_id, transcript)
 
     final_document = f"""* Comprehensive Summary
 {summary}
