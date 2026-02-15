@@ -38,6 +38,11 @@ class TestYt2Org(unittest.TestCase):
         expected_id = "KijwP7D-BBo"
         self.assertEqual(yt2org.extract_standard_video_id(url_watch), expected_id)
 
+    def test_extract_shorts_video_id(self):
+        url = "https://www.youtube.com/shorts/lOTqEdfa_ZA"
+        expected_id = "lOTqEdfa_ZA"
+        self.assertEqual(yt2org.extract_shorts_video_id(url), expected_id)
+
     def test_extract_standard_video_id_user_provided(self):
          # The user explicitly provided `https://www.youtube.com/KijwP7D-BBo`
          url = "https://www.youtube.com/KijwP7D-BBo"

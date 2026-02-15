@@ -48,6 +48,15 @@ def extract_standard_video_id(url):
     return match.group(1) if match else None
 
 
+def extract_shorts_video_id(url):
+    """
+    Extracts the YouTube video ID from a /shorts/ URL using a regular expression.
+    """
+    pattern = r"(?:https?://)?(?:www\.)?youtube\.com/shorts/([a-zA-Z0-9_-]{11})"
+    match = re.search(pattern, url)
+    return match.group(1) if match else None
+
+
 def get_raw_transcript_text(video_id):
     """
     Fetches the raw transcript and returns it as a single string.
@@ -201,6 +210,8 @@ def main():
 
     if "/live/" in args.url:
         video_id = extract_live_video_id(args.url)
+    elif "/shorts/" in args.url:
+        video_id = extract_shorts_video_id(args.url)
     else:
         video_id = extract_standard_video_id(args.url)
 
