@@ -2,10 +2,16 @@
 
 Get a summary of a YT video. Stores the original transcript as well.
 
+*Pre-requisites*:
+
+#+begin_src text
+  uv pip install -r requirements.txt
+  # for convenience (u#+end_src
+
 *Usage:*
 
 #+begin_src text
-❯ ./yt2org.py https://www.youtube.com/watch\?v\=EW4ytINstvc
+❯ ./yt2org https://www.youtube.com/watch\?v\=EW4ytINstvc
 #+end_src
 
 *Options:*
@@ -15,6 +21,11 @@ Specify a directory to save the output org file. If not specified, the file will
 
 #+begin_src text
 ❯ ./yt2org.py https://www.youtube.com/watch\?v\=EW4ytINstvc -o /path/to/directory
+#+end_src
+
+#+begin_src shell
+  alias y="$(which yt2org.py) -o ~/org
+  y https://www.youtube.com/watch\?v\=EW4ytINstvc 
 #+end_src
 
 *Features:*
